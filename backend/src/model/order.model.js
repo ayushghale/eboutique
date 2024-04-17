@@ -12,10 +12,10 @@ const Order = sequelize.define("Order", {
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-      model: User, 
-      key: "id",
-    },
+  },
+  locationId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   totalPrice: {
     type: DataTypes.INTEGER,
@@ -28,11 +28,20 @@ const Order = sequelize.define("Order", {
   status: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'Pending'
+    defaultValue: "Pending",
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: new Date(),
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: new Date(),
   },
 });
 
-// Define associations if needed
 Order.belongsTo(User, { foreignKey: "userId" });
 
 export default Order;

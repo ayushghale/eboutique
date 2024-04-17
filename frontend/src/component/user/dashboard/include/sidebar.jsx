@@ -1,56 +1,43 @@
+import { useLocation } from "react-router-dom";
+
 export default function Sidebar() {
+   const router = useLocation();
   return (
     <div className="flex  flex-col gap-3  ">
       {/* user setting */}
       <div className=" ">
-        <a href="/user/dashboard" className=" font-bold text-lg text-primary ">
+        <a href="/user/dashboard" className={router.pathname==='/user/dashboard' ? 'font-bold text-primary text-lg ': 'font-bold text-lg'}>
           Manage my account
         </a>
         <nav className="ml-4 flex flex-col gap-2 mt-2  font-bold">
           <li>
-            <a href="/user/profile" className=" text-gray">
+            <a href="/user/profile"  className={router.pathname==='/user/profile' ? 'font-bold text-primary':"  text-gray  "}>
               Profile
             </a>
           </li>
           <li>
-            <a href="/user/address" className=" text-gray">
+            <a href="/user/address"  className={router.pathname==='/user/address' ? 'font-bold text-primary':"  text-gray *:  "}>
               Address Booking
             </a>
           </li>
-          <li>
-            <a href="/user/dashboard" className=" text-gray">
-              Payment option
-            </a>
-          </li>
+          
         </nav>
       </div>
       {/* uer order setting */}
       <div className=" ">
-        <a href="/user/orderHistory" className=" font-bold text-lg text-black capitalize ">
-          My Orders
+        <a href="/user/orderHistory" className={router.pathname==='/user/orderHistory' ? 'font-bold text-primary text-lg ': 'font-bold text-lg'}>
+          My order
         </a>
-        <nav className="ml-4 flex flex-col gap-2 mt-2  font-bold">
-          <li>
-            <a href="/user/dashboard" className=" text-gray">
-              Return Order
-            </a>
-          </li>
-          <li>
-            <a href="/user/dashboard/profile" className=" text-gray">
-              Cancelled Order
-            </a>
-          </li>
-        </nav>
       </div>
       {/* user review */}
       <div className=" ">
-        <a href="/user/Review" className=" font-bold text-lg text-black capitalize ">
+        <a href="/user/Review" className={router.pathname==='/user/Review' ? 'font-bold text-primary text-lg ': 'font-bold text-lg'}>
           My Reviews
         </a>
       </div>
       {/*  */}
       <div className=" ">
-        <a href="##" className=" font-bold text-lg text-black capitalize ">
+        <a href="/user/wishlist" className={router.pathname==='/user/wishlist' ? 'font-bold text-primary text-lg ': 'font-bold text-lg'}>
           My wishlist
         </a>
       </div>

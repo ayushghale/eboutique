@@ -1,91 +1,198 @@
-import Payment from '../model/payment.model.js';
+import Payment from "../model/payment.model.js";
+import { errorHandler, successHandler } from "../uitls/response.js";
 
 const PaymentController = {
-    async getAllPayments(req, res) {
-        try {
-            const payments = await Payment.findAll();
-            res.status(200).json(payments);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
+  getAllPayments: async (req, res) => {
+    try {
+      const payments = await Payment.findAll();
+      res.status(200).json(payments);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
 
-    async addPayment(req, res) {
-        try {
-            const { userId, orderId, status, total } = req.body;
-            console.log('Received userId:', userId);
-            const newPayment = await Payment.create({
-                userId: userId,
-                orderId: orderId,
-                status: status,
-                total: total
-            });
-            console.log('Payment created:', newPayment);
-            res.status(201).json("Payment added successfully" + newPayment);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
+  // get payment by userId
+  getPaymentByUserId: async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const payments = await Payment.findAll({
+        where: {
+          userId: userId,
+        },
+      });
+      if (payments.length === 0) {
+        return res.status(404).json("Payment not found");
+      }
+      const userData = await User.findOne({
+        where: {
+          id: userId,
+        },
+      });
 
-    async updatePayment(req, res) {
-        try {
-            const paymentId = req.params.id;
-            console.log('Received paymentId:', req.params.id);
+      const data = {
+        payments,
+        userData,
+      };
 
-            const { newUserId, newOrderId, newStatus, newTotal } = req.body; // Assuming you receive the user ID, new username, and new email in the request body
+      return successHandler(res, data, 200);
+    } catch (error) {
+      return errorHandler(res, error.message, 500);
+    }
+  },
 
-            // Find the user by ID
-            const payment = await Payment.findByPk(paymentId);
+  // finf payment by  tCode
+  getPaymentByTCode: async (req, res) => {
+    try {
+      const tCode = req.params.tCode;
+      const payment = await Payment.findOne({
+        where: {
+          tCode: tCode,
+        },
+      });
 
-            console.log('Received payment:', payment);
+      if (payment) {
+        const userData = await User.findOne({
+          where: {
+            id: payment.userId,
+          },
+        });
+        const order = await Order.findOne({
+          where: {
+            id: payment.orderId,
+          },
+        });
+        const orderDetails = await OrderDetails.findAll({
+          where: {
+            orderId: payment.orderId,
+          },
+        });
+        const data = {
+          payment,
+          userData,
+          order,
+          orderDetails,
+        };
 
-            if (payment) {
-                // Update the user's username and email
-                await Payment.update(
-                    {
-                        userId: newUserId,
-                        orderId: newOrderId,
-                        status: newStatus,
-                        total: newTotal
-                        // Add other fields to update as needed...
-                    },
-                    {
-                        where: {
-                            id: paymentId, // Condition to match the user ID
-                        },
-                    }
-                );
+        return successHandler(res, data, 200);
+      }
+    } catch (error) {
+      return errorHandler(res, error.message, 500);
+    }
+  },
+  // finf payment by  tCode
+  getPaymentByOnlineTCode: async (req, res) => {
+    try {
+      const tCode = req.params.onlineTCode;
+      const payment = await Payment.findOne({
+        where: {
+          onlineTCode: onlineTCode,
+        },
+      });
 
-                res.status(200).json("Payment updated successfully");
-            } else {
-                res.status(404).json("Payment not found");
-            }
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
+      if (payment) {
+        const userData = await User.findOne({
+          where: {
+            id: payment.userId,
+          },
+        });
+        const order = await Order.findOne({
+          where: {
+            id: payment.orderId,
+          },
+        });
+        const orderDetails = await OrderDetails.findAll({
+          where: {
+            orderId: payment.orderId,
+          },
+        });
+        const data = {
+          payment,
+          userData,
+          order,
+          orderDetails,
+        };
 
-    async deletePayment(req, res) {
-        try {
-            const paymentId = req.params.id;
-            console.log('Received paymentId:', req.params.id);
+        return successHandler(res, data, 200);
+      }
+    } catch (error) {
+      return errorHandler(res, error.message, 500);
+    }
+  },
 
-            const payment = await Payment.findByPk(paymentId);
+  // get payment by paymentMethod
+  getPaymentMethod: async (req, res) => {
+    try {
+      const paymentMethod = req.params.paymentMethod;
+      const payments = await Payment.findAll({
+        where: {
+          paymentMethod: paymentMethod,
+        },
+      });
+      if (payments.length === 0) {
+        return res.status(404).json("Payment not found");
+      }
+      return res.status(200).json(payments);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
 
-            if (payment) {
-                await Payment.destroy({
-                    where: {
-                        id: paymentId,
-                    },
-                });
-                res.status(200).json("Payment deleted successfully");
-            } else {
-                res.status(404).json("Payment not found");
-            }
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
+  // get payment by paymentStatus
+  getPaymentStatus: async (req, res) => {
+    try {
+      const paymentstatus = req.params.paymentStatus;
+      const payments = await Payment.findAll({
+        where: {
+          paymentStatus: "pending",
+        },
+      });
+      if (payments.length === 0) {
+        return res.status(404).json("Payment not found");
+      }
+      return res.status(200).json(payments);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
 };
 
 export default PaymentController;
+
+export async function AddPayment(
+    userId,
+    tCode,
+    orderId,
+    paymentType,
+    totalPrice
+  ) {
+
+
+    console.log("Payment Type:", paymentType);
+    console.log("Total Price:", totalPrice);
+    console.log("Order Id:", orderId);
+    console.log("User Id:", userId);
+    console.log("T Code:", tCode);
+    
+    try {
+      // Check if paymentType is null or undefined
+      if (!paymentType) {
+        throw new Error("Payment method cannot be null or undefined");
+      }
+  
+      // Create a new payment record
+      const newPayment = await Payment.create({
+        orderId,
+        userId,
+        totalPrice,
+        paymentMethod: paymentType,
+        tCode,
+      });
+  
+      // Return the newly created payment record
+      return newPayment;
+    } catch (error) {
+      // Return the error if any exception occurs
+      return error;
+    }
+  }
+  

@@ -1,28 +1,3 @@
-// // Import the required package
-// import mysql from 'mysql';
-// import dotenv from 'dotenv';
-// // Load environment variables from .env
-// dotenv.config();
-
-// // Create the MySQL connection configuration
-// const db = mysql.createConnection({
-//   host: process.env.MYSQL_HOST,
-//   user: process.env.MYSQL_USER,
-//   password: process.env.MYSQL_PASSWORD,
-//   database: process.env.MYSQL_DATABASE,
-// });
-
-// // Connect to MySQ
-// export default async function connectToMYSQLDatabase() {
-//   try {
-//     await db.connect();
-//     console.log(`Connected to MYSQL DB`);
-//   } catch (e) { 
-//     console.error("Failed to connect to DB:", e);
-//   }
-// }
-
-
 
 import { Sequelize } from 'sequelize'; 
 import dotenv from 'dotenv';
@@ -31,12 +6,12 @@ dotenv.config();
 
 // Establish the connection to the MySQL database
 const sequelize = new Sequelize({
-  database: process.env.MYSQL_DB_DATABASE,
-  username: process.env.MYSQL_DB_USER,
-  password: process.env.MYSQL_DB_PASSWORD,
-  host: process.env.MYSQL_DB_HOST,
-  dialect: 'mysql', // Specifying the dialect (here, MySQL)
-  
+  dialect: process.env.MYSQL_DB_CONNECTION, // type of database
+  database: process.env.MYSQL_DB_DATABASE, // database name
+  username: process.env.MYSQL_DB_USER, // database user
+  password: process.env.MYSQL_DB_PASSWORD, // database password
+  host: process.env.MYSQL_DB_HOST, // database host
+   
 });
 
 // Test the connection

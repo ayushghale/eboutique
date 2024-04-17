@@ -1,78 +1,120 @@
-import Category from '../model/category.model.js';
+import Category from "../model/category.model.js";
+import { errorHandler, successHandler } from "../uitls/response.js";
 
 const CategoryController = {
-    // add new category
-    async getAllCategories(req, res) {
+  // add new category
+  getAllCategories: async (req, res) => {
+    try {
+      const categories = await Category.findAll();
+      return successHandler(res, categories);
+    } catch (error) {
+      return errorHandler(res, error.message, 500);
+    }
+  },
 
-        try {
-            const categories = await Category.findAll();
-            res.status(200).json(categories);
-        } catch (error) {
-            res.status(500).json({error: error.message});
-        }
-    },
+  // get category by id
+  getCategoryById: async (req, res) => {
+    try {
+      const categoryId = req.params.id;
+      const category = await Category.findByPk(categoryId);
+      if (category) {
+        return successHandler(res, category);
+      } else {
+        return errorHandler(res, "Category not found", 404);
+      }
+    } catch (error) {
+      return errorHandler(res, error.message, 500);
+    }
+  },
 
-    // get category by id
-    async getCategoryById(req, res) {
-        try {
-            const categoryId = req.params.id;
-            const category = await Category.findByPk(categoryId);
-            if (category) {
-                res.status(200).json(category);
-            } else {
-                res.status(404).json("Category not found");
-            }
-        } catch (error) {
-            res.status(500).json({error: error.message});
+  // add new category
+  addCategory: async (req, res) => {
+    try {
+      const image = req.image;
+      const { name,description } = req.body;
+
+      const newCategory = await Category.create({
+        name: name,
+        description:description,
+        image: image,
+      });
+      return successHandler(res, newCategory);
+    } catch (error) {
+      return errorHandler(res, error.message, 500);
+    }
+  },
+
+  // update category
+  updateCategory: async (req, res) => {
+    try {
+      const categoryId = req.params.id;
+      const { name,description } = req.body;
+
+      const category = await Category.findByPk(categoryId);
+
+
+      if (category) {
+        await category.update(
+          {
+            name: name,
+            description:description,
+            image: req.image || category.image,
+          },
+          {
+            where: {
+              id: categoryId,
+            },
+          }
+        );
+        return successHandler(res, category);
+      } else {
+        return errorHandler(res, "Category not found", 404);
+      }
+    } catch (error) {
+        return errorHandler(res, error.message, 500);
+    }
+  },
+  // delete category
+  deleteCategory :async (req, res) =>{
+    try {
+      const category = await Category.destroy({ where: { id: req.params.id } });
+      return successHandler(res, category);
+    } catch (error) {
+      return errorHandler(res, error.message, 500);
+    }
+  },
+
+  updateStatus: async (req, res) => {
+    try {
+      const categoryId = parseInt(req.params.id);
+      let status = "active";
+      const category = await Category.findByPk(categoryId);
+
+
+      if (category) {
+
+        if (category.status === "active") {
+          status = "inactive";
         }
-    },
-    
-    // add new category
-    async addCategory(req, res) {
-        try {
-            const {name} = req.body;
-            const newCategory = await Category.create({
-                name: name
-            });
-            res.status(201).json("Category added successfully" + newCategory);
-        } catch (error) {
-            res.status(500).json({error: error.message});
-        }
-    },
-    // update category
-    async updateCategory(req, res) {
-        try {
-            const categoryId = req.params.id;
-            const {newName} = req.body;
-            const category = await Category.findByPk(categoryId);
-            if (category) {
-                await category.update(
-                    {
-                        name: newName,
-                    },
-                    {
-                        where: {
-                            id: categoryId,
-                        },
-                    }
-                );
-                res.status(200).json("Category updated successfully");
-            } else {
-                res.status(404).json("Category not found");
-            }
-        } catch (error) {
-            res.status(500).json({error: error.message});
-        }
-    },
-    // delete category
-    async deleteCategory(req, res) {
-        try {
-            const category = await Category.destroy({where: {id: req.params.id}});
-            res.status(200).json(category);
-        } catch (error) {
-            res.status(500).json({error: error.message});
-        }
-    },
-}
+
+        await category.update(
+          {
+            status: status,
+          },
+          {
+            where: {
+              id: categoryId,
+            },
+          }
+        );
+        return successHandler(res, category);
+      } else {
+        return errorHandler(res, "Category not found", 404);
+      }
+    } catch (error) {
+        return errorHandler(res, error.message, 500);
+    }
+  },
+};
 
 export default CategoryController;

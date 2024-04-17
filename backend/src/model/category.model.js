@@ -12,14 +12,18 @@ const Category = sequelize.define("Category", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description:{
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "active",
+  },
 });
-
-Category.sync()
-  .then(() => {
-    console.log("Category model synchronized with the database.");
-  })
-  .catch((error) => {
-    console.error("Error synchronizing Category model:", error);
-  });
-
 export default Category;

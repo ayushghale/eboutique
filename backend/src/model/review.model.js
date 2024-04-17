@@ -5,6 +5,7 @@ import sequelize from "../config/sql.js";
 import User from "./user.model.js";
 import Product from "./product.model.js";
 
+// Define the Review model
 const Review = sequelize.define("Review", {
   id: {
     type: DataTypes.INTEGER,
@@ -34,6 +35,11 @@ const Review = sequelize.define("Review", {
   review: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "active",
   },
 });
 

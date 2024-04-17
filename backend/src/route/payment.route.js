@@ -8,16 +8,25 @@ const paymentRouter = Router();
 // api/payment/getAllPayments
 paymentRouter.get("/getAllPayments", PaymentController.getAllPayments);
 
-// add new payment
-// api/payment/addPayment
-paymentRouter.post("/addPayment", PaymentController.addPayment);
+// get payment by userId
+// api/payment/getPaymentByUserId
+paymentRouter.get("/getPaymentByUserId/:id", PaymentController.getPaymentByUserId);
 
-// update payment
-// api/payment/updatePayment/:id
-paymentRouter.put("/updatePayment/:id", PaymentController.updatePayment);
+// get payment by tCode
+// api/payment/getPaymentByTCode
+paymentRouter.get("/getPaymentByTCode/:tCode", PaymentController.getPaymentByTCode);
 
-// delete payment
-// api/payment/deletePayment/:id
-paymentRouter.delete("/deletePayment/:id", PaymentController.deletePayment);
+// get payment by paymentMethod
+// api/payment/getPaymentByMethod/:paymentMethod
+paymentRouter.get("/getPaymentByMethod/:paymentMethod", PaymentController.getPaymentMethod);
+
+// get payment by onlineTCode
+// api/payment/getPaymentByOnlineTCode/:onlineTCode
+paymentRouter.get("/getPaymentByOnlineTCode/:onlineTCode", PaymentController.getPaymentByOnlineTCode);
+
+ // get payment by paymentStatus
+// api/payment/getPaymentByStatus/:paymentStatus
+paymentRouter.get("/getPaymentByStatus/:paymentStatus", PaymentController.getPaymentStatus);
+
 
 export default paymentRouter;

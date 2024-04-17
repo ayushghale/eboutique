@@ -6,24 +6,14 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 
-const solutions = [
-  {
-    name: "Profile",
-    href: "/user/dashboard",
-    icon: UserIcon,
-  },
-  {
-    name: "Logout",
-    href: "##",
-    icon: LogoutIcon,
-  },
-];
+
 
 export default function User() {
   const navigate = useNavigate();
   const [userLoggedIn, setUserLoggedIn] = useState(false);
 
   useEffect(() => {
+    // const userData = "userData" in localStorage;
     const userData = sessionStorage.getItem("accessToken");
     if (userData) {
       setUserLoggedIn(true);
@@ -33,10 +23,28 @@ export default function User() {
   const logOut = () => {
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
-    localStorage.removeItem("userData");
+    sessionStorage.removeItem("token");
     setUserLoggedIn(false);
     navigate("/");
   };
+
+  const dashboard = () => {
+    navigate("/user/dashboard");
+  }
+
+  const solutions = [
+    {
+      name: "Profile",
+      click: dashboard,
+      icon: UserIcon,
+    },
+    {
+      name: "Logout",
+      click : logOut,
+      icon: LogoutIcon,
+    },
+  ];
+
 
   return (
     <div className=" absolute max-w-sm z-50">
@@ -69,11 +77,10 @@ export default function User() {
                   {userLoggedIn ? (
                     <div className="relative grid gap-3 bg-white p-2 lg:grid-row-2">
                       {solutions.map((item) => (
-                        <a
+                        <button
                           key={item.name}
-                          href={item.href}
-                          onClick={item.name === "Logout" ? logOut : null}
-                          className=" flex items-center  rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50"
+                          onClick={item.click}
+                          className=" flex items-center text-black  rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50"
                         >
                           <div className="flex  shrink-0 items-center justify-center text-black sm:h-5 sm:w-5 text-sm">
                             <item.icon aria-hidden="true" />
@@ -83,7 +90,7 @@ export default function User() {
                               {item.name}
                             </p>
                           </div>
-                        </a>
+                        </button>
                       ))}
                     </div>
                   ) : (

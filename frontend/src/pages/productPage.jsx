@@ -1,24 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../component/product/card.jsx";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import Rating from "@mui/material/Rating";
+import api from "../utils/api.js";
 
 import CustomDropDown from "../component/filter/dropdown.jsx";
 
 function valuetext(value) {
   return `${value}°C`;
 }
-const people = [
-    { name: 'Relevent' },
-    { name: 'High to Low' },
-    { name: 'Low to High' },
-  ]
-
+const filter = [
+  { name: "Relevent" },
+  { name: "High to Low" },
+  { name: "Low to High" },
+];
 
 export default function ProductPage() {
   const [value, setValue] = useState([300, 10000]);
 
+  const [product, setProduct] = useState([]);
+
+  const categoryFetch = async () => {
+    try {
+      const response = await api.get("product/getAllProducts");
+      if (response.success) {
+        setProduct(response.data); // Update state with the data array from the response
+
+        console.log("Product fetched successfully:", response.data);
+      } else {
+        console.error("Failed to fetch category:", response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching category:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    categoryFetch();
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -112,19 +132,29 @@ export default function ProductPage() {
               <div className="">
                 <div className="">
                   <div className="flex flex-row justify-between border border-[#dfdfdf] mb-4 rounded-md  pr-2">
-                    <div className="">
-                     <CustomDropDown data={people}     />
+                    <div className="z-3">
+                      <CustomDropDown data={filter} />
                     </div>
                     <div className=" flex flex-col justify-center">
                       <p className=" flex gap-1">
-                        showing itmes <p className=" text-primary">20</p>
+                        showing itmes <p className=" text-primary">{(product).length}</p>
                       </p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 gap-4">
-                    <Card num={25} />
+                </div>
+              </div>
+
+              <div className="">
+                <div className="">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <Card productData={product.slice(0, 5)} />
                   </div>
-                  <div className="">Shorting</div>
+                </div>
+
+                <div className="flex justify-center items-center">
+                  <button className="btn bg-primary p-3 rounded-md hover:bg-primary-dark text-white">
+                    Load More
+                  </button>
                 </div>
               </div>
             </section>

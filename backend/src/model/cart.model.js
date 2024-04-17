@@ -6,7 +6,6 @@ import Product from "./product.model.js";
 import User from "./user.model.js";
 import customDesign from "./customDesign.model.js";
 
-
 const Cart = sequelize.define("Cart", {
   id: {
     type: DataTypes.INTEGER,
@@ -48,5 +47,7 @@ const Cart = sequelize.define("Cart", {
 Cart.belongsTo(Product, { foreignKey: "productId" });
 Cart.belongsTo(User, { foreignKey: "userId" });
 Cart.belongsTo(customDesign, { foreignKey: "customDesignId" });
+
+
 
 export default Cart;

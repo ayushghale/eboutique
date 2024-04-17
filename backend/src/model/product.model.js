@@ -4,14 +4,6 @@ import sequelize from "../config/sql.js";
 
 import Category from "./category.model.js";
 
-// product
-// id: int
-// name : String
-// price : int
-// image : String
-// description : String
-// category_id : int foreign key category(id)
-
 const Product = sequelize.define("Product", {
   id: {
     type: DataTypes.INTEGER,
@@ -26,25 +18,24 @@ const Product = sequelize.define("Product", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  image: {
-    type: DataTypes.STRING,
-    allowNull: true, 
-  },
   description: {
     type: DataTypes.STRING,
-    allowNull: true, 
+    allowNull: true,
   },
   categoryId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Category, // Use the Category model reference
+      model: Category,
       key: "id",
     },
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "active",
+  },
 });
-
-// Define associations
 Product.belongsTo(Category, { foreignKey: "categoryId" });
 
 export default Product;

@@ -5,6 +5,9 @@
   margin: 0;
   font-family: 'Dosis', sans-serif;
 }
+body {
+  background-color: #ffffff;
+}
 
 a{
     text-decoration: none;

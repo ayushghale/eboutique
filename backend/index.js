@@ -1,30 +1,26 @@
-import sequelize from "./src/config/sql.js";
+// Import necessary modules
 import express from "express";
 import cors from "cors";
-// Import the main router
-import mainRouter from "./src/main.route.js";
+import sequelize from "./src/config/sql.js"; // Assuming sequelize is properly configured in this file
+import mainRouter from "./src/main.route.js"; // Assuming this file contains your main router
 
-const db = sequelize;
+import Db from "./src/model/index.js";
 
+// Initialize sequelize and database connection
+// const db = sequelize;
+
+Db.sequelize
+
+// Create an Express application
 const app = express();
-const PORT = 8080;
+const PORT = process.env.MYSQL_DB_PORT || 8080; // Use the provided PORT or default to 8080
 
-app.use(express.json());
-app.use(cors());
-app.use("/api", mainRouter);
+// Middleware setup
+app.use(express.json()); // Parse incoming request bodies in JSON format
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use("/api", mainRouter); // Mount main router at /api endpoint
 
-// Check the database connection
-
-sequelize
-  .sync()
-  .then(() => {
-    console.log("Database connected");
-  })
-  .catch((err) => {
-    console.log("Unable to connect to the database:", err);
-  });
-
-app.listen(PORT, async () => {
-  console.log("express server is running", PORT);
-  // console.log(await blogCategoryRelModel.find().populate(["blog", "category"]));
+// Start the Express server
+app.listen(PORT, () => {
+  console.log("Express server is running on port", PORT);
 });

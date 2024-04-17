@@ -21,12 +21,11 @@ import dotenv from "dotenv";
 dotenv.config(); 
 
 
-export function generateAccessToken(userId, email, role) {
-  // Set the expiration time for the token (e.g., 1 hour)
+export function generateAccessToken(userId, role) {
+  // Set the expiration time for the token (e.g., 1 hour)E:\college\fyp\fyp project\backend\src\uitls\jwt.utils.js
   const expiresIn = '1h';
-
   // Sign the token with the specified payload and secret key
-  const token = jwt.sign({userId, email, role }, process.env.key, { expiresIn });
+  const token = jwt.sign({userId, role }, process.env.key, { expiresIn });
 
   return token;
 }
@@ -41,6 +40,7 @@ export function verifyToken(token) {
 }
 
 export function generateRefreshToken(userId,token, role) {
+  
   const newToken = jwt.sign({userId,token,role}, `${process.env.key}`);
   return newToken;
 } 

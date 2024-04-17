@@ -10,11 +10,11 @@ orderDetailsRouter.get("/getAllOrderDetails", OrderDetailsController.getAllOrder
 
 // add new orderDetails
 // api/orderDetails/addOrderDetails
-orderDetailsRouter.post("/addOrderDetails", OrderDetailsController.addOrderDetails);
+// orderDetailsRouter.post("/addOrderDetails", OrderDetailsController.addOrderDetails);
 
 // update orderDetails
 // api/orderDetails/updateOrderDetails/:id
-orderDetailsRouter.put("/updateOrderDetails/:id", OrderDetailsController.updateOrderDetails);
+// orderDetailsRouter.put("/updateOrderDetails/:id", OrderDetailsController.updateOrderDetails);
 
 // delete orderDetails
 // api/orderDetails/deleteOrderDetails/:id

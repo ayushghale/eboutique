@@ -1,16 +1,34 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../../utils/api";
+
 export default function UserDashboard() {
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userId = parseInt(sessionStorage.getItem("userData"));
+  const [userData, setUserData] = useState("");
   console.log(userData);
 
-  // const UserDetails = ({ user }) => {
-  //   return (
-  //     <div className="">
-  //       <p className="capitalize">{user.name}</p>
-  //       <p className="text-sm lowercase">{user.email}</p>
-  //       <p className="text-sm">{user.phoneNumber}</p>
-  //     </div>
-  //   );
-  // };
+  const navigator = useNavigate();
+  // function to add new address
+  const editProfile = (id) => {
+    navigator("/user/profile/edit/" + id);
+  };
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await api.get(`user/getUserById/${userId}`);
+        if (response.success) {
+          setUserData(response.data.user);
+          console.log("Product fetched successfully:", response.data.user);
+        } else {
+          console.error("Failed to fetch category:", response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching category:", error.message);
+      }
+    };
+    fetchProduct();
+  }, []);
 
   return (
     <>
@@ -26,9 +44,19 @@ export default function UserDashboard() {
                   <p className="   font-bold border-r-2 pr-3  border-[#c3c3c3] ">
                     Profile Details
                   </p>
-                  <p className="text-primary ml-3">Edit</p>
+                  <button 
+                  className="hover:text-primary"
+                  onClick={() => editProfile(userData.id)}
+                  >
+                    <p className="text-primary ml-3">Edit</p>
+                  </button>
                 </div>
-                {/* <UserDetails user={userData} /> */}
+                <div className=" flex flex-col gap-1">
+                  <p className=" capitalize">{userData.name} </p>
+                  <p className=" text-sm">{userData.email}</p>
+                  <p className=" text-sm">(+977) {userData.phoneNumber}</p>
+                  <p className=" text-sm">{userData.address}</p>
+                </div>
               </div>
             </div>
 
@@ -101,31 +129,46 @@ export default function UserDashboard() {
                               <td class="whitespace-nowrap px-6 py-4 font-medium">
                                 1
                               </td>
-                              <td class="whitespace-nowrap px-6 py-4">2024/01/23</td>
-                              <td class="whitespace-nowrap px-6 py-4">clothes</td>
-                              <td class="whitespace-nowrap px-6 py-4">Rs 500</td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                2024/01/23
+                              </td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                clothes
+                              </td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                Rs 500
+                              </td>
                               <td class="whitespace-nowrap px-6 py-4">View</td>
-
                             </tr>
                             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 border-neutral-300 ">
                               <td class="whitespace-nowrap px-6 py-4 font-medium">
                                 1
                               </td>
-                              <td class="whitespace-nowrap px-6 py-4">2024/01/23</td>
-                              <td class="whitespace-nowrap px-6 py-4">clothes</td>
-                              <td class="whitespace-nowrap px-6 py-4">Rs 500</td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                2024/01/23
+                              </td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                clothes
+                              </td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                Rs 500
+                              </td>
                               <td class="whitespace-nowrap px-6 py-4">View</td>
-
                             </tr>
                             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 border-neutral-300 ">
                               <td class="whitespace-nowrap px-6 py-4 font-medium">
                                 1
                               </td>
-                              <td class="whitespace-nowrap px-6 py-4">2024/01/23</td>
-                              <td class="whitespace-nowrap px-6 py-4">clothes</td>
-                              <td class="whitespace-nowrap px-6 py-4">Rs 500</td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                2024/01/23
+                              </td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                clothes
+                              </td>
+                              <td class="whitespace-nowrap px-6 py-4">
+                                Rs 500
+                              </td>
                               <td class="whitespace-nowrap px-6 py-4">View</td>
-
                             </tr>
                           </tbody>
                         </table>

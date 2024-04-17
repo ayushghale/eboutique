@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/sql.js"; // Import the sequelize instance
-
 // Define the User model
 const User = sequelize.define("User", {
   id: {
@@ -19,15 +18,15 @@ const User = sequelize.define("User", {
   phoneNumber: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-    },
+  },
+  emailVerified: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
   },
   password: {
     type: DataTypes.STRING,
@@ -41,15 +40,12 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "active",
+  },
 });
 
-// Synchronize the model with the database (this will create the table if it doesn't exist)
-User.sync()
-  .then(() => {
-    console.log("User model synchronized with the database.");
-  })
-  .catch((error) => {
-    console.error("Error synchronizing User model:", error);
-  });
 
 export default User;

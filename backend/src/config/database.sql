@@ -1,3 +1,21 @@
+-- tabel name
+    admin 
+    user // done
+    location // done
+    category  // done
+    product  // done
+    productImage // done
+    designe // done
+    border // done
+    custome_designe 
+    cart // done
+    favorite // done
+    orderDetails // done
+    order // done
+    payment // done
+    review
+    user_verification
+
 -- user table
 
 admin 

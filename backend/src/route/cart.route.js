@@ -1,22 +1,29 @@
 import { Router } from "express";
 import CartController from "../controller/cart.controller.js";
+import UserMiddleware from "../middlewares/user.middleware.js";
+import {postCartValidation} from "../validator/cart.validator.js";
 
 const cartRouter = Router();
 
-// get all carts
-// api/cart/getAllCarts
-cartRouter.get("/getAllCarts", CartController.getAllCarts);
+// get cart by user id
+// api/cart/:id
+cartRouter.get("/:id", CartController.getCartByUserId);
 
-// add new cart
-// api/cart/addCart
-cartRouter.post("/addCart", CartController.addCart);
+// add cart
+// api/cart/add
+cartRouter.post("/add", CartController.addCart);
 
-// update cart
-// api/cart/updateCart/:id
-cartRouter.put("/updateCart/:id", CartController.updateCart);
+// increase cart quantity
+// api/cart/increase/:id
+cartRouter.get("/increase/:id", CartController.increaseCartQuantity);
+
+// decrease cart quantity
+// api/cart/decrease/:id
+cartRouter.get("/decrease/:id", CartController.decreaseCartQuantity);
 
 // delete cart
-// api/cart/deleteCart/:id
-// cartRouter.delete("/deleteCart/:id", CartController.deleteCart);
+// api/cart/delete/:id
+cartRouter.delete("/delete/:id", CartController.deleteCart);
 
-export default cartRouter;
+
+export default cartRouter; 

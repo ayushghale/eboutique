@@ -34,9 +34,7 @@ function MainWrapper({ route, children }) {
     );
   } else {
     return (
-      <ThemeProvider>
-        <PrivateWrapper>{children}</PrivateWrapper>; 
-      </ThemeProvider>
+        <PrivateWrapper>{children}</PrivateWrapper>
     );
   }
 

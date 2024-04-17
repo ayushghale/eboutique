@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
-
 import sequelize from "../config/sql.js";
-
 import Product from "./product.model.js";
 import Order from "./order.model.js";
 import CustomDesign from "./customDesign.model.js";
@@ -24,15 +22,15 @@ const OrderDetail = sequelize.define("OrderDetail", {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: CustomDesign, 
+      model: CustomDesign,
       key: "id",
     },
   },
   productId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
     references: {
-      model: Product, 
+      model: Product,
       key: "id",
     },
   },

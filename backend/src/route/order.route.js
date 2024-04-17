@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import OrderController from "../controller/order.controller.js";
+import UserMiddleware from "../middlewares/user.middleware.js";
 
 const orderRouter = Router();
 
@@ -10,11 +11,11 @@ orderRouter.get("/getAllOrders", OrderController.getAllOrders);
 
 // add new order
 // api/order/addOrder 
-orderRouter.post("/addOrder", OrderController.addOrder);
+orderRouter.post("/addOrder",UserMiddleware, OrderController.addOrder);
 
 // update order
 // api/order/updateOrder/:id
-orderRouter.put("/updateOrder/:id", OrderController.updateOrder);
+orderRouter.put("/updateOrder/:id",UserMiddleware, OrderController.updateOrder);
 
 // delete order
 // api/order/deleteOrder/:id

@@ -3,6 +3,8 @@ import Product from "../pages/productPage.jsx";
 import ProductDescription from "../pages/description.jsx";
 import Test from "../pages/test.jsx";
 
+import CustomDesign from "../pages/customDesigne/customDesign.jsx";
+
 export const appRoutes = [
   {
     id: "home",
@@ -20,7 +22,7 @@ export const appRoutes = [
   },
   {
     id: "productDescription",
-    path: "/productDescription",
+    path: "/product/description/:id",
     component: ProductDescription,
     layout: "user",
     requiredAuth: false,
@@ -33,4 +35,14 @@ export const appRoutes = [
     // layout: "user",
     requiredAuth: false,
   },
+
+  {
+    id: "customDesign",
+    path: "/customDesign",
+    component: CustomDesign,
+    // layout: "user",
+    requiredAuth: false,
+  },
+
+
 ];

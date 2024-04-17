@@ -7,5 +7,7 @@ export const postCategoryValidation = () => {
       .withMessage("Name can not be empty")
       .isLength({ min: 2, max: 100 })
       .withMessage("Name must be between 2 to 100 characters"),
+
+    
   ];
 };

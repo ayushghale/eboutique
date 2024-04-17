@@ -1,4 +1,5 @@
 import express from "express";
+import multer from "multer";
 
 import adminRouter from "./route/admin.route.js"; // route for admin]
 import borderRouter from "./route/border.route.js"; // route for border
@@ -16,23 +17,43 @@ import userRouter from "./route/user.route.js"; // route for user
 
 import UserAuthController from "./controller/auth/auth.user.controller.js"; // user controller
 import {postUserLoginValidation,postUserRegisterValidation} from"./validator/user.validator.js"; // user validation
+import AuthorizeVerification from "./middlewares/otp.middleware.js"; // authorization verification
+
 
 import validatorResult from "./validator/validator.js"; // validation result
 
+const upload = multer();
 
 const mainRouter = express.Router({ mergeParams: true });
 
 // route for login
-
-mainRouter.post("/login", postUserLoginValidation(), validatorResult, UserAuthController.login);
+mainRouter.post("/login",upload.none(), UserAuthController.login);
 
 // route for register
 // api/register
-mainRouter.post("/register",postUserRegisterValidation(),validatorResult, UserAuthController.register);
+mainRouter.post("/register",upload.none(), UserAuthController.register);
 
 // route for logout
 // api/logout
-mainRouter.get("/logout", UserAuthController.logout);
+mainRouter.get("/logout",upload.none(), UserAuthController.logout);
+
+// route for verify email
+// api/verify-email
+mainRouter.post("/verify-email",upload.none(), UserAuthController.emailVerification);
+
+// route for verify otp
+// api/verify-otp
+mainRouter.post("/verify-otp",AuthorizeVerification,upload.none(), UserAuthController.otpVerification);
+
+// route for forgot password
+// api/forgot-password
+mainRouter.post("/forgot-password",upload.none(), UserAuthController.forgetPassword);
+
+// route for reset password
+// api/reset-password
+mainRouter.post("/reset-password",AuthorizeVerification,upload.none(), UserAuthController.resetPassword);
+
+
 
 
 // Add the user router as a sub-router under the main router

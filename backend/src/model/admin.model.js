@@ -20,21 +20,17 @@ const Admin = sequelize.define("Admin", {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-    },
   },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  status : {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "active",
+  },
 });
-Admin.sync()
-  .then(() => {
-    console.log("Admin model synchronized with the database.");
-  })
-  .catch((error) => {
-    console.error("Error synchronizing Admin model:", error);
-  });
+
+
 export default Admin;

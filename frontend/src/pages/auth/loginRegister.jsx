@@ -5,7 +5,7 @@ import SignUpForm from "../../component/login/SignUp";
 
 export default function LoginPage() {
   const [type, setType] = useState("signIn");
-  const handleOnClick = text => {
+  const handleOnClick = (text) => {
     if (text !== type) {
       setType(text);
       return;
@@ -26,12 +26,19 @@ export default function LoginPage() {
                 To keep connected with us please login with your personal info
               </p>
               <button
-                className="ghost"
+                className="ghost pb-3"
                 id="signIn"
                 onClick={() => handleOnClick("signIn")}
               >
                 Sign In
               </button>
+              <span className="py-2  px-3">
+                <a href="/"className="" style={{
+                  color: "white",
+                  textDecoration: "none",
+                  padding: "10px",
+                }} >Home</a>
+              </span>
             </div>
             <div className="overlay-panel overlay-right">
               <h1>Hello, Friend!</h1>
@@ -43,6 +50,13 @@ export default function LoginPage() {
               >
                 Sign Up
               </button>
+              <span className="py-2  px-3">
+                <a href="/"className="" style={{
+                  color: "white",
+                  textDecoration: "none",
+                  padding: "10px",
+                }} >Home</a>
+              </span>
             </div>
           </div>
         </div>

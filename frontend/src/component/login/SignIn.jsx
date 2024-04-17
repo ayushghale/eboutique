@@ -1,8 +1,11 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 
 function SignInForm() {
   const navigate = useNavigate();
+  const[serverErrors, setServerErrors] = React.useState("")
 
   const [state, setState] = React.useState({
     email: "",
@@ -20,6 +23,7 @@ function SignInForm() {
       [evt.target.name]: value,
     });
   };
+
   const validateForm = () => {
     const { email, password } = state;
     const errors = {
@@ -39,72 +43,32 @@ function SignInForm() {
 
     if (validateForm()) {
       const { email, password } = state;
-      const formData = { email, password };
+
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+
+      console.log("Form submitted: ", email, password);
 
       try {
-        const loginReq = await fetch("http://localhost:8080/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-
-        const response = await loginReq.json();
-
-        console.log(response);
-        if (response.success) {
-
-          // Save the tokens to the session storage
+        // Send a POST request to the API using the FormData object
+        const response = await api.register("login", formData);
+        // Check if the request was successful (status code 2xx)
+        if (response) {
+          // If successful, redirect the user to the dashboard page
+          console.log("response", response);
+          localStorage.setItem("x", response.data.accessToken);
           sessionStorage.setItem("accessToken", response.data.accessToken);
           sessionStorage.setItem("refreshToken", response.data.refreshToken);
-          localStorage.setItem("userData", JSON.stringify(response.data.userData));
-
-          clearForm(); // clear the form
-
+          sessionStorage.setItem("userData", JSON.stringify(response.data.userData));
           navigate("/");
         } else {
-          if (response.errors && Array.isArray(response.errors)) {
-            // Handle validation errors
-            response.errors.forEach((error) => {
-              switch (error.path) {
-                case "email":
-                  setState({
-                    ...state,
-                    errors: {
-                      email: error.message,
-                    },
-                  });
-                  alert(error.message);
-                  break;
-                case "password":
-                  setState({
-                    ...state,
-                    errors: {
-                      password: error.message,
-                    },
-                  });
-                  alert(error.message);
-                  break;
-                default:
-                  break;
-              }
-            });
-          } else if (response.message) {
-            // Handle generic error messages
-            setState({
-              ...state,
-              otherError: response.message,
-            });
-
-            // You can display or handle the generic error as needed
-          } else {
-            console.error("Unexpected error format:", response);
-          }
+          console.log("response", response.data.message);
         }
       } catch (error) {
-        console.error("Fetch error:", error);
+        setServerErrors(error.response.data.message);
       }
+
     }
   };
 
@@ -119,6 +83,8 @@ function SignInForm() {
     });
   };
   const { errors, otherError } = state;
+
+  
 
   return (
     <div className="form-container sign-in-container bg-slate-400 text-center">
@@ -171,7 +137,7 @@ function SignInForm() {
         />
 
         <button className="mt-5">Sign In</button>
-        <a href="##" className=" hover:text-red-600">
+        <a href="/EmailVerification" className=" hover:text-red-600">
           Forgot your password?
         </a>
       </form>

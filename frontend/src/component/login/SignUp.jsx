@@ -1,130 +1,132 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 
 function SignUpForm() {
-  const [state, setState] = React.useState({
-    name: "",
-    email: "",
-    password: "",
-    errors: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState("");
 
-  const handleChange = evt => {
-    const value = evt.target.value;
-    setState({
-      ...state,
-      [evt.target.name]: value
-    });
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const validateForm = () => {
-    const { name, email, password } = state;
-    const errors = {
-      name: name === "" ? "Name cannot be empty" : "",
-      email: email === "" ? "Email cannot be empty" : "",
-      password: password === "" ? "Password cannot be empty" : "",
-    };
-    setState({
-      ...state,
-      errors,
-    });
+    setErrors("");
 
-    return !(errors.name || errors.email || errors.password);
-  };
+    // Check if all fields are filled
+    if (!name || !email || !password) {
+      setErrors("Please fill in all the fields");
+      return;
+    }
 
-  const handleOnSubmit = (evt) => {
-    evt.preventDefault();
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrors("Please enter a valid email address");
+      return;
+    }
 
-    if (validateForm()) {
-      const { name, email, password } = state;
-      alert(
-        `You are signing up with name: ${name}, email: ${email}, and password: ${password}`
-      );
+    // Validate password strength (e.g., minimum length)
+    if (password.length < 0) {
+      setErrors("Password must be at least 6 characters long");
+      return;
+    }
 
-      setState({
-        name: "",
-        email: "",
-        password: "",
-        errors: {
-          name: "",
-          email: "",
-          password: "",
-        },
-      });
+    // Create a new FormData object
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("address", address);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("email", email);
+    formData.append("password", password);
+
+    try {
+      // Send a POST request to the API using the FormData object
+      const response = await api.register("register", formData);
+      // Check if the request was successful (status code 2xx)
+      if (response) {
+        // If successful, redirect the user to the dashboard page
+        console.log("response", response);
+        console.log(response.data.emailVerification);
+        navigate(`/OtpVerification/${response.data.emailVerification}`);
+      } else {
+        console.log("response", response.data.message);
+      }
+    } catch (error) {
+      // If an error occurred, log it to the console
+      console.log("error wile registering");
+      setErrors(error.response.data.message);
     }
   };
 
-  const { name, email, password, errors } = state;
-
   return (
-    <div className="form-container sign-up-container  text-center">
-      <form onSubmit={handleOnSubmit}>
-        <h1 className=" py-5">Create Account</h1>
-        <div className="social-container">
-          <a href="##" className="social">
-            <i className="fab fa-facebook-f" /> 
-          </a>
-          <a href="##" className="social">
-            <i className="fab fa-google-plus-g" />
-          </a>
-          <a href="##" className="social">
-            <i className="fab fa-linkedin-in" />
-          </a>
-        </div>
-        <span className="my-2 text-base">
-          or use your email for registration
-        </span>
-
-        <div className=" w-full">
-          <h2 className=" text-sm text-gray-500 inset-y-0 left-0 text-left">
+    <div className="form-container sign-up-container text-center">
+      <form onSubmit={handleSubmit}>
+        <h1 className="py-5">Create Account</h1>
+        {errors && <p className="text-red-600">{errors}</p>}
+        <div className="w-full">
+          <h2 className="text-sm text-gray-500 inset-y-0 left-0 text-left">
             Name
           </h2>
           <input
             type="text"
             name="name"
             value={name}
-            onChange={handleChange}
-            className="rounded-md focus:outline-none  h-[45px] "
+            onChange={(e) => setName(e.target.value)}
+            className="rounded-md focus:outline-none h-[45px]"
             placeholder="Name"
-            style={{
-              border: errors.name ? "2px solid red" : " 2px solid transparent",
-            }}
           />
-          <h2 className=" text-sm text-gray-500 inset-y-0 left-0 text-left">
+          <h2 className="text-sm text-gray-500 inset-y-0 left-0 text-left">
+            Address
+          </h2>
+          <input
+            type="text"
+            name="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className="rounded-md focus:outline-none h-[45px]"
+            placeholder="Address"
+          />
+          <h2 className="text-sm text-gray-500 inset-y-0 left-0 text-left">
+            Phone Number
+          </h2>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="rounded-md focus:outline-none h-[45px]"
+            placeholder="Phone Number"
+          />
+          <h2 className="text-sm text-gray-500 inset-y-0 left-0 text-left">
             Email
           </h2>
           <input
             type="email"
             name="email"
             value={email}
-            onChange={handleChange}
-            className="rounded-md focus:outline-none  h-[45px] "
+            onChange={(e) => setEmail(e.target.value)}
+            className="rounded-md focus:outline-none h-[45px]"
             placeholder="Email"
-            style={{
-              border: errors.name ? "2px solid red" : " 2px solid transparent",
-            }}
           />
-
-          <h2 className=" text-sm text-gray-500 inset-y-0 left-0 text-left">
+          <h2 className="text-sm text-gray-500 inset-y-0 left-0 text-left">
             Password
           </h2>
           <input
             type="password"
             name="password"
             value={password}
-            onChange={handleChange}
-            className="rounded-md focus:outline-none  h-[45px] "
+            onChange={(e) => setPassword(e.target.value)}
+            className="rounded-md focus:outline-none h-[45px]"
             placeholder="Password"
-            style={{
-              border: errors.name ? "2px solid red" : " 2px solid transparent",
-            }}
           />
         </div>
-
-        <button className="mt-4">Sign Up</button>
+        <button type="submit" className="mt-4">
+          Sign Up
+        </button>
       </form>
     </div>
   );

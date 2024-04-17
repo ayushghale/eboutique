@@ -37,6 +37,7 @@ const Payment = sequelize.define("Payment", {
   paymentStatus: {
     type: DataTypes.STRING,
     allowNull: false,
+    defaultValue: "pending",
   },
   onlineTCode: {
     type: DataTypes.STRING,
@@ -46,10 +47,12 @@ const Payment = sequelize.define("Payment", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  
 });
 
 // Define associations if needed
 Payment.belongsTo(Order, { foreignKey: "orderId" });
 Payment.belongsTo(User, { foreignKey: "userId" });
+
 
 export default Payment;

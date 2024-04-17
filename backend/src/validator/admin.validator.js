@@ -40,9 +40,9 @@ export const updateAdminValidator =()=> {
     [
         param("id")
             .notEmpty()
-            .withMessage("Password can not be empty")
-            .isMongoId()
-            .withMessage("Id should be valid"),
+            .withMessage("Id can not be empty")
+            .isInt()
+            .withMessage("Id should be valid")
     ]
 }
 

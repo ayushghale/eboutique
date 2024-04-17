@@ -56,14 +56,11 @@ const AdminController = {
   // log out admin
   async logout(req, res) {
     try {
-      const { admin } = req;
+      const { admin } = req.admin.id;
 
-      admin.tokens = admin.tokens.filter((token) => {
-        return token.token !== req.token;
-      });
-
-      await admin.save();
-
+      if (!admin) {
+        return errorHandler(res, "Admin not found", 404);
+      }
       return successHandler(res, {}, "Logout successfully", 200);
     } catch (error) {
       return errorHandler(res, error.message, 500);

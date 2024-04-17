@@ -19,5 +19,10 @@ export const postBorderValidation = () => {
         }
         return true; // Validation succeeded
       }),
+    body("price")
+      .notEmpty()
+      .withMessage("Price can not be empty")
+      .isNumeric()
+      .withMessage("Price must be a number"),
   ];
 };

@@ -6,19 +6,33 @@ module.exports = {
    
     extend: {
       colors: {
+
+        user: {
+          primary: '#ea580c',
+          secondary: '#259AE6',
+          danger: '#D34053',
+          warning: '#FFA70B',
+          success: '#219653',
+          info: '#10B981',
+        },
+
         current: 'currentColor',
         transparent: 'transparent',
-        white: '#FFF',
+        white: '#ffffff',
+        offWhite: '#f9f9f9',
         black: '#1C2434',
         'black-2': '#010101',
+        'black-3': '#171717',
         body: '#64748B',
         bodydark: '#AEB7C0',
         bodydark1: '#DEE4EE',
         bodydark2: '#8A99AF',
         primary: '#ea580c',
+        'primary-dark': '#b04209',
         secondary: '#80CAEE',
         stroke: '#E2E8F0',
         gray: '#aaa',
+        'gray-1': '#e6e6e6',
         graydark: '#333A48',
         'gray-2': '#F7F9FC',
         'gray-3': '#FAFAFA',
@@ -277,6 +291,12 @@ module.exports = {
         'spin-1.5': 'spin 1.5s linear infinite',
         'spin-2': 'spin 2s linear infinite',
         'spin-3': 'spin 3s linear infinite',
+      },
+      transitionDuration: {
+        '300': '0.3s',
+      },
+      transitionTimingFunction: {
+        'ease': 'ease',
       },
     },
   },
